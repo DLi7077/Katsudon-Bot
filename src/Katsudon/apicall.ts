@@ -39,24 +39,28 @@ export async function getChannelMessages(
 
 /**
  * @description sends a message with info to database
- * @param {string} msg a messy message block to be cleaned and sent to server
+ * @param {any} msg a messy message block to be cleaned and sent to server
  */
-export async function recordMessage(msg: string) {
+export async function recordMessage(msg: any) {
   const url = "http://localhost:5000/api/add-message";
-  const mentionedUserIds = _.map(
-    _.get(msg, "MessageMentions.users"),
-    (user) => {
-      return _.get(msg, "id");
-    }
-  );
+  const mentionedUsers = Array.from(msg.mentions.users.keys());
+  const mentionedRoles = Array.from(msg.mentions.roles.keys());
+  const attachmentAttributes = Array.from(msg.attachments.values())[0];
+  const attachmentName = _.get(attachmentAttributes, "name");
+  const attachmentSize = _.get(attachmentAttributes, "size");
+  const attachmentType = _.get(attachmentAttributes, "contentType");
+
   const messageBlock = {
     id: _.get(msg, "id"),
     user_id: _.get(msg, "author.id"),
     channel_id: _.get(msg, "channelId"),
     message_content: _.get(msg, "content"),
     message_mentions: {
-      users: mentionedUserIds,
+      users: mentionedUsers,
     },
+    attachment_name: attachmentName,
+    attachment_size: attachmentSize,
+    attachment_type: attachmentType,
   };
   const request = {
     method: "post",
@@ -68,8 +72,7 @@ export async function recordMessage(msg: string) {
   };
 
   const response = await axios(request)
-    .then((res: any) => res.data)
-    .catch(console.error);
+    .catch((e) => console.log("something went wrong"));
 
-  return response.message;
+  return response ?? "error";
 }

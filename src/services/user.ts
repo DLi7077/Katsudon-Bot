@@ -22,7 +22,7 @@ async function getUserByID(user_id: string) {
     .then((res: any) => res.data)
     .catch(console.error);
 
-  return response.username;
+  return response;
 }
 
 

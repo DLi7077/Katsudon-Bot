@@ -15,14 +15,13 @@ client.on("messageCreate", async (msg: any) => {
   if (msg.author == client.user) return;
   if (msg.author.bot) return;
 
-  console.log(msg.mentions);
-  console.log(_.omit(msg, "mentions"));
   const messageContent = msg.content;
   const username = await getUserByID(msg.author.id);
 
-  // await msg.channel.send(`${username} said: ${messageContent}`);
-  await recordMessage(msg).then((res) => console.log(res));
-  console.log(`recorded ${username} saying:\n${messageContent}\n`);
+  await recordMessage(msg).then((res) =>
+    console.log(`recorded ${username} saying:\n${messageContent}\n`)
+  );
+  // console.log(`recorded ${username} saying:\n${messageContent}\n`);
 });
 
 client.login(process.env.TOKEN);
