@@ -1,0 +1,23 @@
+{
+  "name": "katsudon-bot",
+  "version": "1.0.0",
+  "description": "playground for discord bot",
+  "main": "src/Katsudon/Katsudon.ts",
+  "scripts": {
+    "start": "node src/Katsudon/Katsudon.ts",
+    "watch": "nodemon src/Katsudon/Katsudon.ts"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^0.5.0",
+    "axios": "^0.27.2",
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "lodash": "^4.17.21",
+    "nodemon": "^2.0.19",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182"
+  }
+}
