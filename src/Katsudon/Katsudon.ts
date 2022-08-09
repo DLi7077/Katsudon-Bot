@@ -1,6 +1,6 @@
 import { Client, Intents } from "discord.js";
 import * as dotenv from "dotenv";
-import _, { map } from "lodash";
+import _ from "lodash";
 import { recordMessage } from "./Api/message";
 import commandList from "./Commands";
 dotenv.config();
@@ -33,12 +33,14 @@ client.on("ready", (client: any) => {
 // });
 
 const previousMessage: Map<string, string> = new Map();
+const KATSUDONE_ROLE = "1006383172201754704";
 
-
-
+//record only katsudone role
 const userHasRole = (roles: string[], role_id: string) => {
   return roles.includes(role_id);
 };
+
+//ignore spam
 const sameAsPreviousMessage = (user_id: string, message_content: string) => {
   const previous = previousMessage.get(user_id) ?? "";
   const sameAsPrev = previous === message_content;
@@ -54,7 +56,6 @@ client.on("messageCreate", async (msg: any) => {
   const messageContent = msg.content;
   const username = msg.author.username;
 
-  const KATSUDONE_ROLE = "1006383172201754704";
   const speakerRoles = _.get(msg, "member._roles");
   if (!userHasRole(speakerRoles, KATSUDONE_ROLE)) {
     console.log(`${username} does not have katsudone. Must not record.`);
@@ -67,9 +68,7 @@ client.on("messageCreate", async (msg: any) => {
     return;
   }
   await recordMessage(msg)
-    .then((res) =>
-      console.log(`recorded ${username} saying:\n${messageContent}\n`)
-    )
+    .then((res) => console.log(`${username}:\t${messageContent}\n`))
     .catch(console.error);
 });
 
